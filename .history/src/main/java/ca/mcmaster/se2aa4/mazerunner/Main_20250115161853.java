@@ -20,7 +20,6 @@ public class Main {
     private static CommandLineParser parser = new DefaultParser();
 
     private static String filepath;
-
     public static void main(String[] args) {
 
         options.addOption("i", true, "File Path");
@@ -29,9 +28,11 @@ public class Main {
         try {
             CommandLine cmd = parser.parse(options, args);
 
-            if (cmd.hasOption("i")) {
-                filepath = cmd.getOptionValue("i");
+            if (cmd.hasOption("i")){
+                    filepath = cmd.getOptionValue(filepath);
+                } 
             }
+
             logger.info("**** Reading the maze from file " + filepath);
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
             String line;
@@ -45,7 +46,7 @@ public class Main {
                 }
                 logger.trace(System.lineSeparator());
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             logger.error("/!\\ An error has occured /!: \\" + e);
         }
         logger.info("**** Computing path");
