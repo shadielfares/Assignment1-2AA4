@@ -25,6 +25,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+        PathFinder pathFinder = new PathFinder();
         options.addOption("i", true, "File Path");
 
         logger.info("** Starting Maze Runner");
@@ -38,8 +39,6 @@ public class Main {
             logger.info("**** Reading the maze from file " + filepath);
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
             String line;
-
-            PathFinder pathFinder = new PathFinder();
 
             ArrayList<ArrayList<Character>> mazeArray = pathFinder.getMazeArray();
             while ((line = reader.readLine()) != null) {
@@ -60,16 +59,12 @@ public class Main {
             }
 
             pathFinder.setMazeArray(mazeArray);
-            pathFinder.findEntry();
-        for (int i = 0; i < mazeArray.size(); i++){
-            System.out.println(mazeArray.get(i));
-        }
-
         } catch (Exception e) {
             logger.error("/!\\ An error has occured /!: \\" + e);
+            logger.error("PATH NOT COMPUTED");
         }
         logger.info("**** Computing path");
-        logger.error("PATH NOT COMPUTED");
+        pathFinder.pathTraversal();
         logger.info("** End of MazeRunner");
     }
 }
