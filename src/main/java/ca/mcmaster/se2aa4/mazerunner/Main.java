@@ -39,9 +39,9 @@ public class Main {
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
             String line;
 
-            PathFinder pathfinder = new PathFinder();
+            PathFinder pathFinder = new PathFinder();
 
-            ArrayList<ArrayList<Character>> mazeArray = pathfinder.getMazeArray();
+            ArrayList<ArrayList<Character>> mazeArray = pathFinder.getMazeArray();
             while ((line = reader.readLine()) != null) {
                 mazeArray.add(new ArrayList<>());
 
@@ -59,6 +59,8 @@ public class Main {
                 logger.trace(System.lineSeparator());
             }
 
+            pathFinder.setMazeArray(mazeArray);
+            pathFinder.findEntry();
         for (int i = 0; i < mazeArray.size(); i++){
             System.out.println(mazeArray.get(i));
         }
