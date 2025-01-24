@@ -13,6 +13,8 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.CommandLine;
 
+import java.util.ArrayList;
+
 public class Main {
 
     private static final Logger logger = LogManager.getLogger();
@@ -32,24 +34,40 @@ public class Main {
             if (cmd.hasOption("i")) {
                 filepath = cmd.getOptionValue("i");
             }
+
             logger.info("**** Reading the maze from file " + filepath);
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
             String line;
+
+            PathFinder pathfinder = new PathFinder();
+
+            ArrayList<ArrayList<Character>> mazeArray = pathfinder.getMazeArray();
             while ((line = reader.readLine()) != null) {
+                mazeArray.add(new ArrayList<>());
+
+                // Get the index of the current row
+                int rowIdx = mazeArray.size() - 1;
+
                 for (int idx = 0; idx < line.length(); idx++) {
                     if (line.charAt(idx) == '#') {
                         logger.trace("WALL ");
                     } else if (line.charAt(idx) == ' ') {
                         logger.trace("PASS ");
                     }
+                    mazeArray.get(rowIdx).add(line.charAt(idx));
                 }
                 logger.trace(System.lineSeparator());
             }
+
+        for (int i = 0; i < mazeArray.size(); i++){
+            System.out.println(mazeArray.get(i));
+        }
+
         } catch (Exception e) {
             logger.error("/!\\ An error has occured /!: \\" + e);
         }
         logger.info("**** Computing path");
         logger.error("PATH NOT COMPUTED");
-        logger.trace("** End of MazeRunner");
+        logger.info("** End of MazeRunner");
     }
 }
