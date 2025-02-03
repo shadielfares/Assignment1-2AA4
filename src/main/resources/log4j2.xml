@@ -7,7 +7,8 @@
     </Appenders>
 
     <Loggers>
-        <Root level="info">
+        <!--    Loggers Turned Off    -->
+        <Root level="off">
             <AppenderRef ref="console" />
         </Root>
     </Loggers>
