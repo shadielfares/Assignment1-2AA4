@@ -12,29 +12,6 @@ public class PathSequence{
         System.out.println(convertToFactorize());
     }
 
-    public String normalizeSequence(String sequence) {
-        StringBuilder normalizedSequence = new StringBuilder();
-
-        int length = sequence.length();
-        for (int i = 0; i < length; i++) {
-            char currentChar = sequence.charAt(i);
-
-            // Check if the current character is a digit
-            if (Character.isDigit(currentChar)) {
-                int repeatCount = Character.getNumericValue(currentChar);
-                if (i + 1 < length && Character.isLetter(sequence.charAt(i + 1))) {
-                    char direction = sequence.charAt(i + 1);
-                    normalizedSequence.append(String.valueOf(direction).repeat(repeatCount));
-                    i++; // Skip the direction character after processing
-                }
-            } else if (Character.isLetter(currentChar)) {
-                // Add single directions directly
-                normalizedSequence.append(currentChar);
-            }
-        }
-        return normalizedSequence.toString();
-    }
-
     public String convertToFactorize() {
         StringBuilder factorizedSequence = new StringBuilder();
 
