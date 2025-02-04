@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  */
 public class PathChecker extends PathTraversal {
     private final String sequence;
-
+    PathSequence pathSequence = new PathSequence();
     public PathChecker(String path) {
         this.sequence = path;
     }
@@ -29,7 +29,7 @@ public class PathChecker extends PathTraversal {
         Direction currentDirection = Direction.RIGHT; // Default direction for starting
 
         // Parse the sequence into individual steps
-        ArrayList<String> commands = parseSequence(sequence);
+        ArrayList<String> commands = pathSequence.parseSequence(sequence);
 
         for (String command : commands) {
             int steps = 1; // Default to 1 step for non-factorized moves
@@ -73,16 +73,5 @@ public class PathChecker extends PathTraversal {
         }
     }
 
-    private ArrayList<String> parseSequence(String sequence) {
-        ArrayList<String> commands = new ArrayList<>();
-        Pattern pattern = Pattern.compile("\\d*[FRL]"); // Match commands for F, R, L with optional numeric prefix
-        Matcher matcher = pattern.matcher(sequence);
 
-        // Extract commands from the input sequence
-        while (matcher.find()) {
-            commands.add(matcher.group());
-        }
-
-        return commands;
-    }
 }

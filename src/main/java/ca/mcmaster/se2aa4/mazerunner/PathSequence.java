@@ -1,5 +1,9 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class PathSequence{
     private static String sequence = "";
 
@@ -30,5 +34,18 @@ public class PathSequence{
         }
 
         return factorizedSequence.toString().trim(); // Remove the trailing space
+    }
+
+    public ArrayList<String> parseSequence(String sequence) {
+        ArrayList<String> commands = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d*[FRL]"); // Match commands for F, R, L with optional numeric prefix
+        Matcher matcher = pattern.matcher(sequence);
+
+        // Extract commands from the input sequence
+        while (matcher.find()) {
+            commands.add(matcher.group());
+        }
+
+        return commands;
     }
 }
