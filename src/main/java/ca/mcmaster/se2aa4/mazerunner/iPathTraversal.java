@@ -6,6 +6,6 @@ public interface iPathTraversal {
     ArrayList<Integer> findEntry();
     ArrayList<Integer> findExit();
     boolean reachedExit(int currentRow, int currentCol);
-    ArrayList<Integer> move(int i, int j);
+    ArrayList<Object> move(int i, int j, Direction direction);
     boolean canMoveTo(int i, int j);
 }

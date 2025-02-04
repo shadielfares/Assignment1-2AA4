@@ -14,7 +14,7 @@ public class PathTraversal implements iPathTraversal {
     //Method to find exit point
     @Override
     public ArrayList<Integer> findExit(){
-        ArrayList<Integer> exitPosition = new ArrayList<Integer>();
+        ArrayList<Integer> exitPosition = new ArrayList<>();
 
         for (int i =0; i < mazeArray.mazeSize(); i++){
             ArrayList<Character> row = mazeArray.currentRow(i);
@@ -31,11 +31,10 @@ public class PathTraversal implements iPathTraversal {
     //Method to find entry point
     @Override
     public ArrayList<Integer> findEntry(){
-        ArrayList<Integer> entryPosition = new ArrayList<Integer>();
+        ArrayList<Integer> entryPosition = new ArrayList<>();
         for (int i =0; i < mazeArray.mazeSize();i++){
             ArrayList<Character> row = mazeArray.currentRow(i);
             if (row.getFirst().equals(' ')){
-                logger.info("Entry is located at: [{},0]", i);
                 entryPosition.add(i);
                 entryPosition.add(0);
                 return entryPosition;
@@ -50,34 +49,6 @@ public class PathTraversal implements iPathTraversal {
         return currentRow == exitPosition.get(0) && currentCol == exitPosition.get(1);
     }
 
-    // Method to handle movement logic
-    @Override
-    public ArrayList<Integer> move(int i, int j) {
-        ArrayList<Integer> newPosition = new ArrayList<>();
-
-        if (canMoveTo(i, j + 1)) { // Check if we can move right
-            pathSequence.setSequence("R");
-            newPosition.add(i);
-            newPosition.add(j + 1);
-        } else if (canMoveTo(i + 1, j)) { // Check if we can move down
-            pathSequence.setSequence("D");
-            newPosition.add(i + 1);
-            newPosition.add(j);
-        } else if (canMoveTo(i, j - 1)) { // Check if we can move left
-            pathSequence.setSequence("L");
-            newPosition.add(i);
-            newPosition.add(j - 1);
-        } else if (canMoveTo(i - 1, j)) { // Check if we can move up
-            pathSequence.setSequence("U");
-            newPosition.add(i - 1);
-            newPosition.add(j);
-        } else {
-            throw new IllegalStateException("No valid moves available. Check maze boundaries or logic.");
-        }
-        return newPosition; // Return the updated position
-    }
-
-
     // Helper method to check if a move is valid
     @Override
     public boolean canMoveTo(int i, int j) {
@@ -87,20 +58,93 @@ public class PathTraversal implements iPathTraversal {
                 mazeArray.currentRow(i).get(j).equals(' '); // Ensure it's a moveable space
     }
 
-    public void pathTraversal() {
-        ArrayList<Integer> entryIndex = findEntry(); // Find the entry point
-        int currentRow = entryIndex.get(0); // Row index of entry
-        int currentCol = entryIndex.get(1); // Column index of entry
+    public int getNextRow(int currentRow, Direction direction) {
+        if (direction == Direction.UP) return currentRow - 1;
+        if (direction == Direction.DOWN) return currentRow + 1;
+        return currentRow; // No change for LEFT or RIGHT
+    }
 
-        logger.info("**** Computing path");
+    public int getNextCol(int currentCol, Direction direction) {
+        if (direction == Direction.LEFT) return currentCol - 1;
+        if (direction == Direction.RIGHT) return currentCol + 1;
+        return currentCol; // No change for UP or DOWN
+    }
 
-        // Traverse the maze until the exit is reached
-        while (!reachedExit(currentRow, currentCol)) {
-            ArrayList<Integer> newPosition = move(currentRow, currentCol); // Move to the next position
-            currentRow = newPosition.get(0); // Update row
-            currentCol = newPosition.get(1); // Update column
+    public ArrayList<Object> move(int currentRow, int currentCol, Direction currentDirection) {
+        ArrayList<Object> moveResult = new ArrayList<>();
+
+        // 1. Try turning right and moving forward
+        Direction rightDirection = currentDirection.turnRight();
+        int rightRow = getNextRow(currentRow, rightDirection);
+        int rightCol = getNextCol(currentCol, rightDirection);
+        if (canMoveTo(rightRow, rightCol)) {
+            pathSequence.setSequence("R"); // Log the right turn
+            pathSequence.setSequence("F"); // Log moving forward
+            moveResult.add(rightRow); // New row
+            moveResult.add(rightCol); // New column
+            moveResult.add(rightDirection); // New direction
+            return moveResult;
         }
 
-        pathSequence.printSequence();
+        // 2. Try moving forward in the current direction
+        int forwardRow = getNextRow(currentRow, currentDirection);
+        int forwardCol = getNextCol(currentCol, currentDirection);
+        if (canMoveTo(forwardRow, forwardCol)) {
+            pathSequence.setSequence("F"); // Log moving forward
+            moveResult.add(forwardRow); // New row
+            moveResult.add(forwardCol); // New column
+            moveResult.add(currentDirection); // Keep direction
+            return moveResult;
+        }
+
+        // 3. Try turning left and moving forward
+        Direction leftDirection = currentDirection.turnLeft();
+        int leftRow = getNextRow(currentRow, leftDirection);
+        int leftCol = getNextCol(currentCol, leftDirection);
+        if (canMoveTo(leftRow, leftCol)) {
+            pathSequence.setSequence("L"); // Log the left turn
+            pathSequence.setSequence("F"); // Log moving forward
+            moveResult.add(leftRow); // New row
+            moveResult.add(leftCol); // New column
+            moveResult.add(leftDirection); // New direction
+            return moveResult;
+        }
+
+        // 4. Turn around if all other options are blocked
+        Direction reverseDirection = currentDirection.turnRight().turnRight();
+        pathSequence.setSequence("R"); // Log the first right turn
+        pathSequence.setSequence("R"); // Log the second right turn (180° turn)
+        moveResult.add(currentRow); // Stay in the same row
+        moveResult.add(currentCol); // Stay in the same column
+        moveResult.add(reverseDirection); // Update to reversed direction
+        return moveResult;
+    }
+
+    public void pathTraversal() {
+        ArrayList<Integer> entryIndex = findEntry(); // Find the entry position
+        if (entryIndex.isEmpty()) {
+            logger.error("No entry point found in the maze.");
+            return; // Abort if no entry point exists
+        }
+
+        // Initialize position and direction
+        int currentRow = entryIndex.get(0);
+        int currentCol = entryIndex.get(1);
+        Direction currentDirection = Direction.RIGHT; // Default starting direction
+
+        logger.info("**** Starting path traversal ");
+
+        // Traverse the maze until reaching the exit
+        while (!reachedExit(currentRow, currentCol)) {
+            ArrayList<Object> moveResult = move(currentRow, currentCol, currentDirection);
+
+            // Update current position and direction
+            currentRow = (int) moveResult.get(0); // New row
+            currentCol = (int) moveResult.get(1); // New column
+            currentDirection = (Direction) moveResult.get(2); // New direction
+        }
+
+        logger.info("**** Exit reached at (" + currentRow + ", " + currentCol + ")");
+        pathSequence.printSequence(); // Output the path taken
     }
 }
