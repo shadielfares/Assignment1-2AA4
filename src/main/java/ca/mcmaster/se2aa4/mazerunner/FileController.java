@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.commons.cli.CommandLine;
 
 //FileController, decides whether to call the PathTraversal or Path Checker
-// It does this based on the provided option
+// It does this based on the provided option in CLI
 public class FileController {
 
     private static final Options options = new Options();
@@ -36,8 +36,7 @@ public class FileController {
                 throw new IllegalStateException("Improper use of flags");
             }
         } catch (Exception e){
-            logger.error("/!\\ An error has occurred while picking parsing flags/!: ");
+            logger.error("/!\\ An error has occurred while picking parsing flags/!: ", e);
         }
     }
-
 }

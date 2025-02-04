@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Purpose: Reads a maze from a file and populates it into a 2D MazeArray
+ * Param filepath, the path to the maze file
+ * Throws if maze cannot be read or there is no start or end.
+ **/
+
 public class MazeReader {
     private static final Logger logger = LogManager.getLogger();
     private static String filepath;
