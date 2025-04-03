@@ -3,6 +3,7 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,10 +16,8 @@ import org.apache.logging.log4j.Logger;
 
 public class MazeReader {
     private static final Logger logger = LogManager.getLogger();
-    private static String filepath;
 
     public MazeReader(String filepath) {
-        MazeReader.filepath = filepath;
         read(filepath);
     }
 
@@ -30,7 +29,7 @@ public class MazeReader {
             BufferedReader reader = new BufferedReader(new FileReader(filepath));
             String line;
 
-            ArrayList<ArrayList<Character>> mazeArrayList = mazeArray.getMazeArray();
+            List<List<Character>> mazeArrayList = mazeArray.getMazeArray();
             while ((line = reader.readLine()) != null) {
                 mazeArrayList.add(new ArrayList<>());
 
@@ -48,6 +47,7 @@ public class MazeReader {
                 }
                 logger.trace(System.lineSeparator());
             }
+            reader.close();
         } catch (Exception e) {
             logger.error("/!\\ An error has occurred while reading the file/!: ");
         }

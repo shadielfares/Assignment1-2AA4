@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PathSequence{
+public class PathSequence {
     private static String sequence = "";
 
-    //Sequence Methods
-    public void setSequence(String newValue){
+    // Sequence Methods
+    public void appendSequence(String newValue) {
         sequence += newValue;
     }
 
-    public void printSequence(){
+    public void printSequence() {
         System.out.println(convertToFactorize());
+    }
+
+    public String getSequence() {
+        return sequence;
     }
 
     public String convertToFactorize() {
@@ -28,7 +32,11 @@ public class PathSequence{
                 count++;
             } else {
                 // Append the count and character to the result
-                factorizedSequence.append(count).append(sequence.charAt(i - 1)).append(" ");
+                if (count > 1) {
+                    factorizedSequence.append(count).append(sequence.charAt(i - 1)).append(" ");
+                } else {
+                    factorizedSequence.append(sequence.charAt(i - 1)).append(" ");
+                }
                 count = 1; // Reset count for the next character
             }
         }

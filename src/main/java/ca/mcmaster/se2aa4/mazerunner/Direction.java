@@ -24,7 +24,6 @@ public enum Direction {
         leftMap.put(DOWN, RIGHT);
         leftMap.put(RIGHT, UP);
     }
-
     /**
      * Get the direction to the right of this one.
      * @return The direction to the right.

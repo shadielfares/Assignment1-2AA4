@@ -1,8 +1,7 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * Function: PathChecker validates a given path through the CLI.
@@ -18,7 +17,7 @@ public class PathChecker extends PathTraversal {
 
     public void checkPath() {
         // Start from the maze's entry point
-        ArrayList<Integer> currentPosition = findEntry();
+        List<Integer> currentPosition = entryPosition;
         if (currentPosition.isEmpty()) {
             System.out.println("No entry point found in the maze!");
             return; // Exit if no entry is found
@@ -66,12 +65,11 @@ public class PathChecker extends PathTraversal {
         }
 
         // Check if the final position matches the exit
+        // EDIT: Remove this to exist for the Unit Tests
         if (reachedExit(currentRow, currentCol)) {
             System.out.println("Correct path!");
         } else {
             System.out.println("Incorrect path!");
         }
     }
-
-
 }
