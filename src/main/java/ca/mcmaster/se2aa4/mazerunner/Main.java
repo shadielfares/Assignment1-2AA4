@@ -7,8 +7,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.commons.cli.CommandLine;
 
-//Main should decide whether to call the PathTraversal or Path Checker
-// It does this based on the provided option in CLI
 public class Main {
     private static final Options options = new Options();
     private static final CommandLineParser parser = new DefaultParser();
@@ -21,21 +19,22 @@ public class Main {
         logger.info("** Starting Maze Runner");
         try {
             CommandLine cmd = parser.parse(options, args);
+            CommandHistory history = new CommandHistory();
 
-            if (cmd.hasOption("i") && cmd.hasOption("p")) {
+            if (cmd.hasOption("i")) {
                 String filepath = cmd.getOptionValue("i");
                 String sequence = cmd.getOptionValue("p");
-                new MazeReader(filepath);
-                new PathChecker(sequence).checkPath();
-            } else if (cmd.hasOption("i")) {
-                String filepath = cmd.getOptionValue("i");
-                logger.info("Filepath:" + filepath);
-                new MazeReader(filepath);
-                new PathTraversal().pathTraversal(true);
+                Object mazeRunner = MazeRunnerFactory.createMazeRunner(filepath, sequence, history);
+
+                if (mazeRunner instanceof PathChecker) {
+                    ((PathChecker) mazeRunner).checkPath();
+                } else if (mazeRunner instanceof RightHandAlgorithm) {
+                    ((RightHandAlgorithm) mazeRunner).pathTraversal(true);
+                }
             } else {
                 throw new IllegalStateException("Improper use of flags");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("/!\\ An error has occurred while picking parsing flags/!: ", e);
         }
     }

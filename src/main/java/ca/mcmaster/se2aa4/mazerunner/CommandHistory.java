@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PathSequence {
+public class CommandHistory {
     private static String sequence = "";
 
     // Sequence Methods
