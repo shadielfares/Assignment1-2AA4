@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.List;
 import java.util.Arrays;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -84,8 +83,7 @@ public class PathTraversalTest {
     @Test
     @DisplayName("Performing for Valid Move: Moving on Direct Maze")
     public void testMoveAction() {
-        Position oldPos = new Position();
-        oldPos.set(2, 0, Direction.LEFT);
+        Position oldPos = new Position(0, 1, Direction.RIGHT);
 
         Maze maze = new Maze("./examples/straight.maz.txt"); // Initialize maze here
         Explorer explorer = new Explorer(maze, new CommandHistory());

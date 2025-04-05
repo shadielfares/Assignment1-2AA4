@@ -20,9 +20,7 @@ public class TurnRightCommand extends Command {
     public void execute() {
         Position pos = explorer.copyPosition();
         Direction rightDirection = pos.getHeading().turnRight();
-        int rightCol = rightDirection.getNextCol(pos.getCol());
-        int rightRow = rightDirection.getNextRow(pos.getRow());
 
-        explorer.setPosition(rightRow, rightCol, rightDirection);
+        explorer.setPosition(pos.getRow(), pos.getCol(), rightDirection);
     }
 }

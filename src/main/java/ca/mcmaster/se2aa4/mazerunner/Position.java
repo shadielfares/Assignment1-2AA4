@@ -1,40 +1,46 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /*
  * This is a violation of Leaky Abstraction..
  * Prudent, Deliberate Technical Debt.
  */
 
 public class Position {
-    private static List<Object> position = new ArrayList<Object>();
+    private int row;
+    private int col;
+    private Direction heading;
 
-    
-    public void set(int currentRow, int currentCol,  Direction direction) {
-        if (!position.isEmpty()) {
-            clear();
-        }
-        position.add(currentRow);
-        position.add(currentCol);
-        position.add(direction);
+    public Position(int row, int col, Direction heading) {
+        this.row = row;
+        this.col = col;
+        this.heading = heading;
     }
 
-    public static void clear() {
-        position.clear();
-    }
 
+    // Getters
     public int getRow() {
-        return (int) position.getFirst();
+        return row;
     }
 
     public int getCol() {
-        return (int) position.get(1);
+        return col;
     }
 
     public Direction getHeading() {
-        return (Direction) position.getLast();
+        return heading;
+    }
+
+    // Setters
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public void setHeading(Direction heading) {
+        this.heading = heading;
     }
 
 }

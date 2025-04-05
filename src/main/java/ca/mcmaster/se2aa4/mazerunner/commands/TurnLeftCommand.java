@@ -20,9 +20,7 @@ public class TurnLeftCommand extends Command {
     public void execute() {
         Position pos = explorer.copyPosition();
         Direction leftDirection = pos.getHeading().turnLeft();
-        int leftRow = leftDirection.getNextRow(pos.getRow());
-        int leftCol = leftDirection.getNextCol(pos.getCol());
 
-        explorer.setPosition(leftRow, leftCol, leftDirection);
+        explorer.setPosition(pos.getRow(), pos.getCol(), leftDirection);
     }
 }

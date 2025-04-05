@@ -19,7 +19,7 @@ public class Explorer {
 
     public Explorer(Maze maze, CommandHistory history) {
         this.maze = maze;
-        this.position = new Position();
+        this.position = new Position(0, 0, Direction.RIGHT); // Temp values for when the RHA starts
         this.history = history;
     }
 
@@ -35,12 +35,13 @@ public class Explorer {
 
     //Deep Copy
     public Position copyPosition() {
-        Position copyPosition = position;
-        return copyPosition;
+        return new Position(position.getRow(), position.getCol(), position.getHeading());
     }
 
     public void setPosition(int newRow, int newCol, Direction newDirection) {
-        position.set(newRow, newCol, newDirection);
+        position.setRow(newRow);
+        position.setCol(newCol);
+        position.setHeading(newDirection);
     }
 
     public boolean canMoveTo(int i, int j) {
@@ -61,7 +62,7 @@ public class Explorer {
     private boolean tryMove(int currentRow, int currentCol, Direction direction) {
         int nextRow = direction.getNextRow(currentRow);
         int nextCol = direction.getNextCol(currentCol);
-    
+
         logger.info(String.format("Attempting to move from (%d, %d) to (%d, %d) in direction %s", 
             currentRow, currentCol, nextRow, nextCol, direction));
     
@@ -77,11 +78,13 @@ public class Explorer {
             } else if (direction == currentDirection.turnLeft()) {
                 logger.info("Turning left to align with the desired direction.");
                 executeCommand(new TurnLeftCommand(this));
-            }
-    
-            // Move forward
-            logger.info("Moving forward.");
-            executeCommand(new ForwardCommand(this));
+            } 
+                // Move forward
+                //By the time I execute this from (1,1)
+                //I am already at (2,1), which means I must be moving 
+                logger.info("Moving forward.");
+                executeCommand(new ForwardCommand(this));
+            
             logger.info(String.format("Successfully moved to (%d, %d) in direction %s", 
                 position.getRow(), position.getCol(), position.getHeading()));
             return true; // Move was successful
@@ -93,12 +96,15 @@ public class Explorer {
 
     public void move(int currentRow, int currentCol, Direction currentDirection) {
         // 1. Try turning right and moving forward
+        // The turning right and left is fine because it registers it correct in the tryMove 
+        // method
+
         if (tryMove(currentRow, currentCol, currentDirection.turnRight()))
             return;
 
         // 2. Try moving forward in the current direction
         if (tryMove(currentRow, currentCol, currentDirection))
-            return;
+        return;
 
         // 3. Try turning left and moving forward
         if (tryMove(currentRow, currentCol, currentDirection.turnLeft()))

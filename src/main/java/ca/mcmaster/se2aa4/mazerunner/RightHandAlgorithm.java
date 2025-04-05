@@ -55,7 +55,7 @@ public class RightHandAlgorithm {
             currentCol = newPosition.getCol();
             currentRow = newPosition.getRow();
             currentDirection = newPosition.getHeading();
-            logger.debug(String.format("Position: (%d, %d), Direction: %s", currentRow, currentCol, currentDirection));
+            logger.info(String.format("Position: (%d, %d), Direction: %s", currentRow, currentCol, currentDirection));
         }
 
         logger.info("**** Exit reached at (" + currentRow + ", " + currentCol + ")");

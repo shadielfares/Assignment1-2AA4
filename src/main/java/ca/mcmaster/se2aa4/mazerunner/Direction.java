@@ -3,6 +3,8 @@ package ca.mcmaster.se2aa4.mazerunner;
 import java.util.EnumMap;
 import java.util.Map;
 
+//Passing
+
 public enum Direction {
     UP {
         @Override
